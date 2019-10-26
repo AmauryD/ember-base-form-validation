@@ -1,9 +1,11 @@
 {
   "name": "ember-simple-validation",
   "version": "0.0.0",
-  "description": "Small description for ember-simple-validation goes here",
+  "description": "Very simple validation using components and validation models",
   "keywords": [
-    "ember-addon"
+    "ember-addon",
+    "ember-validation",
+    "validation"
   ],
   "repository": "",
   "license": "MIT",
