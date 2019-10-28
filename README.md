@@ -17,7 +17,7 @@ Installation
 ------------------------------------------------------------------------------
 
 ```
-ember install ember-simple-validation
+ember install ember-base-form-validation
 ```
 
 
