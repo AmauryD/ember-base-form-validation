@@ -49,6 +49,12 @@ export default class ValidationFormComponent extends Component {
         }
     }
 
+    didInsertElement() {
+        if (this.args.validateOnInit) {
+            this.validate();
+        }
+    }
+
     constructor() {
         super(...arguments);
         this.state.validationSchema = this.args.schema;
