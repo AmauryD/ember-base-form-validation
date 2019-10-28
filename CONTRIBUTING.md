@@ -3,7 +3,7 @@
 ## Installation
 
 * `git clone <repository-url>`
-* `cd ember-simple-validation`
+* `cd ember-base-form-validation`
 * `yarn install`
 
 ## Linting
