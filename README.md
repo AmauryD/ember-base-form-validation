@@ -39,7 +39,7 @@ Features
 Usage
 ------------------------------------------------------------------------------
 
-Simple validation form :
+#### Simple validation form :
 
 
 *userform.hbs*
@@ -119,7 +119,37 @@ export class UserValidator extends BaseValidator {
 }
 ```
 
+#### Custom validation form :
 
+Same as above except for the template
+Custom Input let you define you own input to bind the value to and validate
+
+*userform.hbs*
+```handlebars
+<ValidationForm @schema={{this.validation}} as |form|>
+  <ValidationInputCustom @parent={{form}} @validation="username" @value={{@model.username}} as |i|>
+    <Input type="text" name="username" @value={{i.value}} {{on "change" i.validate}}  />
+
+    {{#if i.error}}
+      <p>{{i.error}}</p>
+    {{/if}}
+  </ValidationInputCustom>
+
+    <ValidationInputCustom @parent={{form}} @validation="email" @value={{@model.email}} as |i|>
+    <Input type="text" name="email" @value={{i.value}} {{on "change" i.validate}}  />
+
+    {{#if i.error}}
+      <p>{{i.error}}</p>
+    {{/if}}
+  </ValidationInputCustom>
+  
+  {{#if form.validating}}
+    <p>Validating...</p>
+  {{else}}
+    <input type="submit" disabled={{form.hasErrors}} {{on "click" form.validate}} {{on "click" this.submit}} value="submit">
+  {{/if}}
+</ValidationForm>
+```
 
 Contributing
 ------------------------------------------------------------------------------

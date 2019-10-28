@@ -7,20 +7,12 @@ module('Integration | Component | validation-input', function(hooks) {
   setupRenderingTest(hooks);
 
   test('it renders', async function(assert) {
-    // Set any properties with this.set('myProperty', 'value');
-    // Handle any actions with this.set('myAction', function(val) { ... });
-
-    await render(hbs`<ValidationInput />`);
-
-    assert.equal(this.element.textContent.trim(), '');
 
     // Template block usage:
     await render(hbs`
-      <ValidationInput>
-        template block text
-      </ValidationInput>
+      <ValidationForm as |form|>
+        <ValidationInput @parent={{form}} />
+      </ValidationForm>
     `);
-
-    assert.equal(this.element.textContent.trim(), 'template block text');
   });
 });

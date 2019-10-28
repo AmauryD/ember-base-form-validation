@@ -10,8 +10,6 @@ module('Integration | Component | validation-form', function(hooks) {
     // Set any properties with this.set('myProperty', 'value');
     // Handle any actions with this.set('myAction', function(val) { ... });
 
-    await render(hbs`<ValidationForm />`);
-
     assert.equal(this.element.textContent.trim(), '');
 
     // Template block usage:

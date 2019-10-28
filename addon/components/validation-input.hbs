@@ -1,2 +1,6 @@
-<Input @value={{this.value}} {{on @validateOn this.validate}}  ...attributes />
+{{#if @validateOn}}
+  <Input @value={{this.value}} {{on @validateOn this.validate}}  ...attributes />
+{{else}}
+  <Input @value={{this.value}}  ...attributes /> 
+{{/if}}
 {{yield this}}
