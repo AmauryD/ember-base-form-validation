@@ -98,7 +98,7 @@ Validation methods can also be async
 *user.js*
 ```js
 import validator from 'validator';
-import { BaseValidator , validationProperty } from 'ember-simple-validation';
+import { BaseValidator , validationProperty } from 'ember-base-form-validation';
 
 export class UserValidator extends BaseValidator {
     @validationProperty
