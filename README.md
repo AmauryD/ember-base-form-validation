@@ -1,4 +1,4 @@
-ember-base-validation
+ember-base-form-validation
 ==============================================================================
 
 Simple ember component based form validation module , only providing base structure and components for validation 
@@ -21,39 +21,51 @@ ember install ember-simple-validation
 ```
 
 
-Usage
+Features
 ------------------------------------------------------------------------------
 
-Example
+- Async validation
+- Component level validation
+- You choose when to validate and at which level
+- You can use 2 components : 
+  - ValidationForm : form who contains ValidationInput and ValidationInputCustom components
+    - methods : validate 
+    - properties : validating , hasErrors
+  - ValidationInput 
+    - methods : validate
+    - properties : error
+  - ValidationInputCustom : you need to bind the value yourself , you juste have the method validate available
+
+Usage
 ------------------------------------------------------------------------------
 
 Simple validation form :
 
 
-userform.hbs
+*userform.hbs*
 ```handlebars
 <ValidationForm @schema={{this.validation}} as |form|>
-  <ValidationInput @parent={{form}} @name="username" @value={{@model.username}} as |i|>
-    <Input type="text" name="username" @value={{i.value}}  />
-
+  <ValidationInput @parent={{form}} @validation="username"  @validateOn="change" @value={{@model.username}} as |i|>
     {{#if i.error}}
-      <p>{{i.error.message}}</p>
+      <p>{{i.error}}</p>
     {{/if}}
   </ValidationInput>
 
-  <ValidationInput @parent={{form}} @name="email" @value={{@model.username}} as |i|>
-    <Input type="text" name="email" @value={{i.value}}   />
-
+  <ValidationInput @parent={{form}} @validation="email" @validateOn="change" @value={{@model.username}} as |i|>
     {{#if i.error}}
-      <p>{{i.error.message}}</p>
+      <p>{{i.error}}</p>
     {{/if}}
   </ValidationInput>
   
-  <input type="submit" {{on "click" form.validateAll}} {{on "click" this.submit}} value="submit">
+  {{#if form.validating}}
+    <p>Validating...</p>
+  {{else}}
+    <input type="submit" disabled={{form.hasErrors}} {{on "click" form.validate}} {{on "click" this.submit}} value="submit">
+  {{/if}}
 </ValidationForm>
 ```
 
-userform.js
+*userform.js*
 ```js
 import Component from '@glimmer/component';
 import { UserValidator } from '../validation/user';
@@ -69,40 +81,40 @@ export default class UserFormComponent extends Component {
     
     @action
     submit(t) {
-        if (this.validation.hasErrors())
+        if (this.validation.hasErrors() || this.validation.validationRunning())
         {
-            // if has errors , deny
+            // if has errors or async tasks are running , deny
             return;
         }
+
+        // do your job
     }
 }
 ```
 
 In this example we use validator as validation library but you can use any library you want
+Validation methods can also be async 
 
-user.js
+*user.js*
 ```js
 import validator from 'validator';
 import { BaseValidator , validationProperty } from 'ember-simple-validation';
 
-
 export class UserValidator extends BaseValidator {
     @validationProperty
     username(str) {
-        return this.validationObject(
-            validator.isLength(str,{
-                min : 10
-            }),
-            'Lenght must be less than 10 characters'
-        );
+        if (!validator.isLength(str,{
+            min : 10
+        })) {
+            return 'Lenght must be less than 10 characters';
+        }
     }
 
     @validationProperty
-    email(str) {
-        return this.validationObject(
-            validator.isEmail(str),
-            'Email not valid'
-        );
+    async email(str) {
+        if (!validator.isEmail(str)) {
+            return 'Email not valid';
+        }
     }
 }
 ```
@@ -112,7 +124,7 @@ export class UserValidator extends BaseValidator {
 Contributing
 ------------------------------------------------------------------------------
 
-:exclamation: New to EmberJS community don't hesitate to contribute and correct me on bad practices
+:exclamation: I'm new to EmberJS community , don't hesitate to contribute !
 See the [Contributing](CONTRIBUTING.md) guide for details.
 
 
