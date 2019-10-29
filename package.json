@@ -8,7 +8,7 @@
     "validation"
   ],
   "repository": {
-    "url": "https://github.com/AmauryD/ember-base-form-validation.git",
+    "url": "https://github.com/TRIPTYK/ember-base-form-validation.git",
     "type": "git"
   },
   "license": "MIT",
