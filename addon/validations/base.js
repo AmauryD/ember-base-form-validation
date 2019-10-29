@@ -46,8 +46,6 @@ export class BaseValidator {
 
     validationFor(field,value) {
         if (!this[field]) throw new Error(`${field} does not have validation`);
-
-
         const validationResult = this[field](value);
         
         // handle async validation and assign the result when ready

@@ -7,7 +7,10 @@
     "ember-validation",
     "validation"
   ],
-  "repository": "",
+  "repository": {
+    "url" : "https://github.com/AmauryD/ember-base-form-validation.git",
+    "type" : "git"
+  },
   "license": "MIT",
   "author": "",
   "directories": {
