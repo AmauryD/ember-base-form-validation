@@ -8,8 +8,8 @@
     "validation"
   ],
   "repository": {
-    "url" : "https://github.com/AmauryD/ember-base-form-validation.git",
-    "type" : "git"
+    "url": "https://github.com/AmauryD/ember-base-form-validation.git",
+    "type": "git"
   },
   "license": "MIT",
   "author": "",
@@ -27,8 +27,8 @@
   },
   "dependencies": {
     "ember-cli-babel": "^7.11.1",
-    "ember-uuid": "^2.1.0",
-    "ember-cli-htmlbars": "^4.0.0"
+    "ember-cli-htmlbars": "^4.0.0",
+    "ember-uuid": "^2.1.0"
   },
   "devDependencies": {
     "@ember/edition-utils": "^1.1.1",
