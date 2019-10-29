@@ -151,6 +151,27 @@ Custom Input let you define you own input to bind the value to and validate
 </ValidationForm>
 ```
 
+### Create your own component 
+
+You can inherit `BaseValidationInputComponent` class to make your custom component
+
+```js
+import { BaseValidationInputComponent } from 'ember-base-form-validation';
+
+export default class MyinputComponent extends BaseValidationInputComponent {
+    constructor() {
+        super(...arguments);
+        console.log("Init custom");
+    }
+
+    validate() {
+        super.validate();
+        console.log("Hey , i'm custom");
+    }
+}
+
+```
+
 Contributing
 ------------------------------------------------------------------------------
 
