@@ -165,7 +165,8 @@ export default class MyinputComponent extends BaseValidationInputComponent {
         console.log("Init custom");
     }
 
-    validate() {
+    @action
+    validate() {  
         super.validate();
         console.log("Hey , i'm custom");
     }
