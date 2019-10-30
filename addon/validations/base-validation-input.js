@@ -6,7 +6,7 @@ export default class BaseValidationInputComponent extends Component {
     @tracked value;
     @tracked error;
     @tracked parent;
-    name;
+    @tracked name;
 
     constructor() {
         super(...arguments);
