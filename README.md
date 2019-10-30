@@ -125,9 +125,11 @@ export class UserValidator extends BaseValidator {
 Same as above except for the template
 Custom Input let you define you own input to bind the value to and validate
 
+You can add the `@validateOnInit` property to the form , it will validate the input when they are loaded or registered
+
 *userform.hbs*
 ```handlebars
-<ValidationForm @schema={{this.validation}} as |form|>
+<ValidationForm @validateOnInit={{true}} @schema={{this.validation}} as |form|>
   <ValidationInputCustom @parent={{form}} @validation="username" @value={{@model.username}} as |i|>
     <Input type="text" name="username" @value={{i.value}} {{on "change" i.validate}}  />
 
@@ -152,11 +154,13 @@ Custom Input let you define you own input to bind the value to and validate
 </ValidationForm>
 ```
 
-### Create your own component 
+### Create your own components
 
-You can inherit `BaseValidationInputComponent` class to make your custom component
+You can inherit `BaseValidationInputComponent` class to make your custom input component and `BaseValidationFormComponent` to make your own validation form
 
+*myinput.js*
 ```js
+import { action } from '@ember/object';
 import { BaseValidationInputComponent } from 'ember-base-form-validation';
 
 export default class MyinputComponent extends BaseValidationInputComponent {
@@ -168,7 +172,27 @@ export default class MyinputComponent extends BaseValidationInputComponent {
     @action
     validate() {  
         super.validate();
-        console.log("Hey , i'm custom");
+        console.log("Validate " + this.name);
+    }
+}
+
+```
+
+*myform.js*
+```js
+import { action } from '@ember/object';
+import { BaseValidationFormComponent } from 'ember-base-form-validation';
+
+export default class MyformComponent extends BaseValidationFormComponent {
+    constructor() {
+        super(...arguments);
+        console.log("Init custom");
+    }
+
+    @action
+    validate() {  
+        super.validate();
+        console.log("Validate all");
     }
 }
 
