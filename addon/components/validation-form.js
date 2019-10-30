@@ -40,18 +40,16 @@ export default class ValidationFormComponent extends Component {
      */
     registerChild(child) {
         this.state.childrens.push(child);
+
+        if (this.args.validateOnInit) {
+            child.validate();
+        }
     }
 
     @action
     validate() {
         for (let child of this.state.childrens) {
             child.validate();
-        }
-    }
-
-    didInsertElement() {
-        if (this.args.validateOnInit) {
-            this.validate();
         }
     }
 
