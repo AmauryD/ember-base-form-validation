@@ -3,14 +3,12 @@ import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 
 export default class BaseValidationInputComponent extends Component {
-    @tracked value;
     @tracked error;
     @tracked parent;
     @tracked name;
 
     constructor() {
         super(...arguments);
-        this.value = this.args.value;
         this.name = this.args.validation;
         this.parent = this.args.parent;
         this.parent.registerChild(this);
@@ -19,7 +17,7 @@ export default class BaseValidationInputComponent extends Component {
     @action
     async validate() {
         this.parent.updateState();
-        const res = await this.parent.state.validationSchema.validationFor(this.name,this.value);
+        const res = await this.parent.state.validationSchema.validationFor(this.name,this.args.value);
         this.parent.updateState();
         this.error = res;
     }

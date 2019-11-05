@@ -1,6 +1,6 @@
 {{#if @validateOn}}
-  <Input @value={{this.value}} {{on @validateOn this.validate}}  ...attributes />
+  <Input @value={{mut @value}} {{on @validateOn this.validate}}  ...attributes />
 {{else}}
-  <Input @value={{this.value}}  ...attributes /> 
+  <Input @value={{mut @value}}  ...attributes /> 
 {{/if}}
 {{yield this}}
