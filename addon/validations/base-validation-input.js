@@ -2,11 +2,28 @@ import Component from '@glimmer/component';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 
+/**
+ *
+ *
+ * @export
+ * @class BaseValidationInputComponent
+ * @extends {Component}
+ */
 export default class BaseValidationInputComponent extends Component {
+    /**
+     * @property {BaseValidationFormComponent} parent
+     * @property {*} error
+     * @property {string} name
+     * 
+     */
     @tracked error;
     @tracked parent;
     @tracked name;
 
+    /**
+     * Creates an instance of BaseValidationInputComponent.
+     * @memberof BaseValidationInputComponent
+     */
     constructor() {
         super(...arguments);
         this.name = this.args.validation;
@@ -14,6 +31,11 @@ export default class BaseValidationInputComponent extends Component {
         this.parent.registerChild(this);
     }
 
+    /**
+     * Validate value of input
+     *
+     * @memberof BaseValidationInputComponent
+     */
     @action
     async validate() {
         this.parent.updateState();

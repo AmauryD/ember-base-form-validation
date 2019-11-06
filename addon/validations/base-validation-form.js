@@ -2,19 +2,38 @@ import Component from '@glimmer/component';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 
+/**
+ *
+ *
+ * @export
+ * @class BaseValidationFormComponent
+ * @extends {Component}
+ */
 export default class BaseValidationFormComponent extends Component {
+    /**
+     *
+     *
+     * @memberof BaseValidationFormComponent
+     */
     @tracked state = {
         validationSchema : null,
         childrens : []
     }
 
-    // a bit tricky but that works
+    /**
+     * Update state of component
+     *
+     * @memberof BaseValidationFormComponent
+     */
     updateState() {
         this.state = this.state;
     }
 
     /**
-     * Check if async validation is running
+     *  Check if validator is validating
+     *
+     * @readonly
+     * @memberof BaseValidationFormComponent
      */
     get validating() {
         return this.state.validationSchema.validationRunning();
@@ -22,21 +41,29 @@ export default class BaseValidationFormComponent extends Component {
 
     /**
      * Check if form has errors
+     *
+     * @readonly
+     * @memberof BaseValidationFormComponent
      */
     get hasErrors() {
         return this.errorsArray.length > 0;
     }
 
     /**
-     * Returns the errors array of validation Schema
+     *
+     *
+     * @readonly
+     * @memberof BaseValidationFormComponent
      */
     get errorsArray() {
         return Object.values(this.state.validationSchema.errors).filter((v) => v !== null);
     }
 
     /**
-     * Register child in parent
-     * @param {BaseValidationInputComponent} child 
+     * Add child to form
+     *
+     * @param {BaseValidationInputComponent} child
+     * @memberof BaseValidationFormComponent
      */
     registerChild(child) {
         this.state.childrens.push(child);
@@ -46,6 +73,11 @@ export default class BaseValidationFormComponent extends Component {
         }
     }
 
+    /**
+     * Validates all children
+     *
+     * @memberof BaseValidationFormComponent
+     */
     @action
     validate() {
         for (let child of this.state.childrens) {
@@ -53,6 +85,10 @@ export default class BaseValidationFormComponent extends Component {
         }
     }
 
+    /**
+     *Creates an instance of BaseValidationFormComponent.
+     * @memberof BaseValidationFormComponent
+     */
     constructor() {
         super(...arguments);
         this.state.validationSchema = this.args.schema;

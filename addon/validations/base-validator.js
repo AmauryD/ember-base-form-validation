@@ -1,5 +1,14 @@
 import { v1 } from "ember-uuid";
 
+/**
+ * Register validation property to class
+ *
+ * @export
+ * @param {*} target
+ * @param {*} name
+ * @param {*} descriptor
+ * @returns
+ */
 export function validationProperty(target, name, descriptor) {
     const fn = descriptor.value;
     
@@ -24,10 +33,26 @@ export function validationProperty(target, name, descriptor) {
     return descriptor;
 }
 
+/**
+ *
+ *
+ * @export
+ * @class BaseValidator
+ */
 export class BaseValidator {
+    /** 
+     * @property {object} errors
+     * @property {object} asyncErrors
+     */
     errors = {};
     asyncErrors = {};
 
+    /**
+     *
+     *
+     * @returns
+     * @memberof BaseValidator
+     */
     validationRunning() {
         for (let obj in this.asyncErrors) {
             if (Object.keys(this.asyncErrors[obj]).length > 0) {
@@ -37,6 +62,12 @@ export class BaseValidator {
         return false;
     }
 
+    /**
+     *
+     *
+     * @returns {boolean}
+     * @memberof BaseValidator
+     */
     hasErrors() {
         for (let err in this.errors)
             if (this.errors[err] !== null) return true;
@@ -44,6 +75,14 @@ export class BaseValidator {
         return false;
     }
 
+    /**
+     * Validate
+     *
+     * @param {string} field
+     * @param {string} value
+     * @returns
+     * @memberof BaseValidator
+     */
     validationFor(field,value) {
         if (!this[field]) throw new Error(`${field} does not have validation`);
         const validationResult = this[field](value);
