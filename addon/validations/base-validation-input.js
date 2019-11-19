@@ -28,6 +28,13 @@ export default class BaseValidationInputComponent extends Component {
         super(...arguments);
         this.name = this.args.validation;
         this.parent = this.args.parent;
+
+        if (this.args.parent === undefined) {
+            if (this.args.alone) return; // if input is alone  ignore
+
+            throw new Error(`Component '${this.name}' needs to have a 'BaseValidationFormComponent' instance as parent , if you want this component without validation and parent use '@alone' as argument to the input. Note that the validate() method will throw an error if called`);
+        }
+
         this.parent.registerChild(this);
     }
 
@@ -38,9 +45,9 @@ export default class BaseValidationInputComponent extends Component {
      */
     @action
     async validate() {
-        this.parent.updateState();
+        this.parent.updateState(); //parent is required for validation , makes no sense without form , will throw an Error
         const res = await this.parent.state.validationSchema.validationFor(this.name,this.args.value);
-        this.parent.updateState();
+        this.parent.updateState(); 
         this.error = res;
     }
 }
