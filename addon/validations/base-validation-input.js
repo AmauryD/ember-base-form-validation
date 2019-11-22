@@ -32,7 +32,7 @@ export default class BaseValidationInputComponent extends Component {
         if (this.args.parent === undefined) {
             if (this.args.alone) return; // if input is alone  ignore
 
-            throw new Error(`Component '${this.name}' needs to have a 'BaseValidationFormComponent' instance as parent , if you want this component without validation and parent use '@alone' as argument to the input. Note that the validate() method will throw an error if called`);
+            throw new Error(`Component '${this}' needs to have a 'BaseValidationFormComponent' instance as parent , if you want this component without validation and parent use '@alone' as argument to the input. Note that the validate() method will throw an error if called`);
         }
 
         this.parent.registerChild(this);
