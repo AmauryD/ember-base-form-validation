@@ -1,3 +1,22 @@
 <h2 id="title">Welcome to Ember</h2>
 
-{{outlet}}
+<ValidationForm @schema={{this.validation}} {{on "submit" this.submit}} @validateOnInit={{true}} as |form|>
+  <ValidationInput @parent={{form}} @validation="username"  @validateOn="change" @value={{this.model.username}} as |i|>
+    {{#if i.error}}
+      <p>{{i.error}}</p>
+    {{/if}}
+  </ValidationInput>
+
+  <ValidationInput @parent={{form}} @validation="email" @validateOn="change" @value={{this.model.email}} as |i|>
+    {{#if i.error}}
+      <p>{{i.error}}</p>
+    {{/if}}
+  </ValidationInput>
+  
+  {{#if form.validating}}
+    <p>Validating...</p>
+  {{else}}
+    <input type="submit" {{on "click" form.validate}} value="submit">
+  {{/if}}
+
+</ValidationForm>

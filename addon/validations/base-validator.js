@@ -69,10 +69,19 @@ export class BaseValidator {
      * @memberof BaseValidator
      */
     hasErrors() {
-        for (let err in this.errors)
-            if (this.errors[err] !== null) return true;
+        for (let err in this.errors) 
+            if (this.errors[err] !== null) 
+                return true;
 
         return false;
+    }
+
+    /**
+     * wait for validation to finish background tasks and then run
+     */
+    async waitAndCheckErrors() {
+        while (this.validationRunning());
+        return this.hasErrors();
     }
 
     /**
@@ -84,7 +93,7 @@ export class BaseValidator {
      * @memberof BaseValidator
      */
     validationFor(field,value) {
-        if (!this[field]) throw new Error(`${field} does not have validation`);
+        if (!this[field]) throw new Error(`'${field}' does not have validation`);
         const validationResult = this[field](value);
         
         // handle async validation and assign the result when ready

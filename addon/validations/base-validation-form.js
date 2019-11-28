@@ -68,7 +68,7 @@ export default class BaseValidationFormComponent extends Component {
     registerChild(child) {
         this.state.childrens.push(child);
 
-        if (this.args.validateOnInit) {
+        if (this.args.validateOnInit === true) {
             child.validate();
         }
     }

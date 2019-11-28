@@ -17,9 +17,9 @@ export default class BaseValidationInputComponent extends Component {
      * 
      */
     @tracked error;
-    @tracked parent;
     @tracked name;
 
+    parent;
     /**
      * Creates an instance of BaseValidationInputComponent.
      * @memberof BaseValidationInputComponent
@@ -32,7 +32,19 @@ export default class BaseValidationInputComponent extends Component {
         if (this.args.parent === undefined) {
             if (this.args.alone) return; // if input is alone  ignore
 
-            throw new Error(`Component '${this}' needs to have a 'BaseValidationFormComponent' instance as parent , if you want this component without validation and parent use '@alone' as argument to the input. Note that the validate() method will throw an error if called`);
+            throw new Error(`Component '${this.constructor.name}' needs to have a 'BaseValidationFormComponent' instance as '@parent' , if you want this component without validation and parent use '@alone={{true}}' as argument to the input. Note that the validate() method will throw an error if called`);
+        }else{
+            if (this.parent.state.validationSchema === undefined) {
+                throw new Error(`Component '${this.constructor.name}' needs to have a 'BaseValidator' instance as '@schema' , if you want this component without validation and parent use '@alone={{true}}' as argument to the input. Note that the validate() method will throw an error if called`);
+            }
+        }
+
+        if (!this.args.value) {
+            console.warn(`Component '${this.constructor.name}' seems to have an undefined @validation attribute`);
+        }
+
+        if (!this.args.validation) {
+            throw new Error(`Component '${this.constructor.name}' needs to have a '@validation' attribute , if you want this component without validation and parent use '@alone={{true}}' as argument to the input. Note that the validate() method will throw an error if called`);
         }
 
         this.parent.registerChild(this);

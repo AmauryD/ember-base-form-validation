@@ -82,13 +82,12 @@ export default class UserFormComponent extends Component {
     
     @action
     submit(t) {
-        if (this.validation.hasErrors() || this.validation.validationRunning())
-        {
-            // if has errors or async tasks are running , deny
+        this.validation.waitAndCheckErrors().then(  (hasErrors) => {
+          if (hasErrors) {
             return;
+          }
+          // do your job
         }
-
-        // do your job
     }
 }
 ```
