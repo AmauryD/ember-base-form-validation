@@ -1,6 +1,12 @@
 import validator from 'validator';
 import { BaseValidator , validationProperty } from 'ember-base-form-validation';
 
+function sleep(ms){
+    return new Promise(resolve=>{
+        setTimeout(resolve,ms)
+    })
+}
+
 export class UserValidator extends BaseValidator {
     @validationProperty
     username(str) {
@@ -12,7 +18,8 @@ export class UserValidator extends BaseValidator {
     }
 
     @validationProperty
-    email(str) {
+    async email(str) {
+        await sleep(1000);
         if (!validator.isEmail(str)) {
             return 'Email not valid';
         }

@@ -195,6 +195,11 @@ export default class MyformComponent extends BaseValidationFormComponent {
     }
 }
 
+Methods
+------------------------------------------------------------------------------
+
+
+
 ```
 
 Contributing
