@@ -54,7 +54,7 @@ export class BaseValidator {
      * @memberof BaseValidator
      */
     validationRunning() {
-        for (let obj in this.asyncErrors) {
+        for (const obj in this.asyncErrors) {
             if (Object.keys(this.asyncErrors[obj]).length > 0) {
                 return true;
             }
@@ -63,13 +63,13 @@ export class BaseValidator {
     }
 
     /**
-     *
+     * Checkl if current validator has errors
      *
      * @returns {boolean}
      * @memberof BaseValidator
      */
     hasErrors() {
-        for (let err in this.errors) 
+        for (const err in this.errors) 
             if (this.errors[err] !== null) 
                 return true;
 
@@ -77,7 +77,10 @@ export class BaseValidator {
     }
 
     /**
-     * wait for validation to finish background tasks and then run
+     * Wait for validation to finish background tasks and then run
+     *
+     * @returns {boolean}
+     * @memberof BaseValidator
      */
     async waitAndCheckErrors() {
         while (this.validationRunning());

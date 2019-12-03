@@ -51,7 +51,7 @@ export default class BaseValidationInputComponent extends Component {
     }
 
     /**
-     * Validate value of input
+     * Validate child value and update parent
      *
      * @memberof BaseValidationInputComponent
      */
