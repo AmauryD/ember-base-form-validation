@@ -26,6 +26,7 @@ export default class ApplicationController  extends Controller {
             {
                 console.log("NOPE");
             }
+            console.log(this.model);
         });
         //console.log("NOPE");
     }

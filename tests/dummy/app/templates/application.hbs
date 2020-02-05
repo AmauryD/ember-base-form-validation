@@ -7,7 +7,7 @@
     {{/if}}
   </ValidationInput>
 
-  <ValidationInput @parent={{form}} @validation="email" @validateOn="change" @value={{this.model.email}} as |i|>
+  <ValidationInput @alone={{true}} @value={{this.model.email}} as |i|>
     {{#if i.error}}
       <p>{{i.error}}</p>
     {{/if}}
@@ -16,7 +16,7 @@
   {{#if form.validating}}
     <p>Validating...</p>
   {{else}}
-    <input type="submit" {{on "click" form.validate}} value="submit">
+    <input type="submit" disabled={{form.hasErrors}} {{on "click" form.validate}} value="submit">
   {{/if}}
 
 </ValidationForm>

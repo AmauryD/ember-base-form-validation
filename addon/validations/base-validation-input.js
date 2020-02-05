@@ -57,6 +57,10 @@ export default class BaseValidationInputComponent extends Component {
      */
     @action
     async validate() {
+        if (this.args.parent === undefined) {
+            if (this.args.alone) return; // if input is alone  ignore
+        }
+
         this.parent.updateState(); //parent is required for validation , makes no sense without form , will throw an Error
         const res = await this.parent.state.validationSchema.validationFor(this.name,this.args.value);
         this.parent.updateState(); 

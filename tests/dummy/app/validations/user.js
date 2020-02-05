@@ -19,7 +19,6 @@ export class UserValidator extends BaseValidator {
 
     @validationProperty
     async email(str) {
-        await sleep(1000);
         if (!validator.isEmail(str)) {
             return 'Email not valid';
         }
