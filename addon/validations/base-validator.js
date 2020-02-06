@@ -14,7 +14,7 @@ export function validationProperty(target, name, descriptor) {
     
     
     if (descriptor.value.constructor.name === "AsyncFunction") {
-        descriptor.value = async function(...args){ 
+        descriptor.value = async (...args) => { 
             if (this.errors[name] === undefined) {
               this.errors[name] = null;
               this.asyncErrors[name] = {};
@@ -22,7 +22,7 @@ export function validationProperty(target, name, descriptor) {
             return fn.apply(this, args);
         }
     }else{
-        descriptor.value = function(...args){ 
+        descriptor.value = (...args) => { 
             if (this.errors[name] === undefined) {
               this.errors[name] = null;
             }

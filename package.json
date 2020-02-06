@@ -1,6 +1,6 @@
 {
   "name": "ember-base-form-validation",
-  "version": "0.0.14",
+  "version": "0.0.15",
   "description": "Very simple validation using components and validation models",
   "keywords": [
     "ember-addon",
