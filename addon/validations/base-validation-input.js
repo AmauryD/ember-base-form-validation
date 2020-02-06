@@ -39,7 +39,7 @@ export default class BaseValidationInputComponent extends Component {
             }
         }
 
-        if (!this.args.value) {
+        if (!this.args.value && !this.args.selected) {
             console.warn(`Component '${this.constructor.name}' seems to have an undefined @validation attribute`);
         }
 
@@ -62,7 +62,8 @@ export default class BaseValidationInputComponent extends Component {
         }
 
         this.parent.updateState(); //parent is required for validation , makes no sense without form , will throw an Error
-        const res = await this.parent.state.validationSchema.validationFor(this.name,this.args.value);
+        let value = this.args.value || this.args.selected;
+        const res = await this.parent.state.validationSchema.validationFor(this.name,value);
         this.parent.updateState(); 
         this.error = res;
     }
