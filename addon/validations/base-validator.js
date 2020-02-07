@@ -12,9 +12,8 @@ import { v1 } from "ember-uuid";
 export function validationProperty(target, name, descriptor) {
     const fn = descriptor.value;
     
-    
     if (descriptor.value.constructor.name === "AsyncFunction") {
-        descriptor.value = async (...args) => { 
+        descriptor.value = function (...args) { 
             if (this.errors[name] === undefined) {
               this.errors[name] = null;
               this.asyncErrors[name] = {};
@@ -22,7 +21,7 @@ export function validationProperty(target, name, descriptor) {
             return fn.apply(this, args);
         }
     }else{
-        descriptor.value = (...args) => { 
+        descriptor.value = function (...args) { 
             if (this.errors[name] === undefined) {
               this.errors[name] = null;
             }
