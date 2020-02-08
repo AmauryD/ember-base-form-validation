@@ -1,6 +1,9 @@
 ember-base-form-validation
 ==============================================================================
 
+![Test](https://github.com/TRIPTYK/ember-base-form-validation/workflows/Test/badge.svg)
+![Build](https://github.com/TRIPTYK/ember-base-form-validation/workflows/Build/badge.svg)
+
 Simple ember component based form validation module , only providing base structure and components for validation . His goal is to be flexible and adaptive to any situation.
 
 :warning: This addon does not provide any types validation methods or checks.
