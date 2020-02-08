@@ -16,4 +16,4 @@ jobs:
       - name: Install modules
         run: npm install
       - name: Run tests
-        run: ls -l
+        run: ls -l /home/runner/work/ember-base-form-validation/ember-base-form-validation/
