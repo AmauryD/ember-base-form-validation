@@ -9,27 +9,40 @@ import { v1 } from "ember-uuid";
  * @param {*} descriptor
  * @returns
  */
-export function validationProperty(target, name, descriptor) {
-    const fn = descriptor.value;
-    
-    if (descriptor.value.constructor.name === "AsyncFunction") {
-        descriptor.value = function (...args) { 
-            if (this.errors[name] === undefined) {
-              this.errors[name] = null;
-              this.asyncErrors[name] = {};
+export function validationProperty(ignoreUndefined = true) {
+    return function(target, name, descriptor) {
+        const fn = descriptor.value;
+        
+        if (descriptor.value.constructor.name === "AsyncFunction") {
+            descriptor.value = function (...args) { 
+                if (this.errors[name] === undefined) {
+                    this.errors[name] = null;
+                    this.asyncErrors[name] = {};
+                }
+
+                if (ignoreUndefined && args[0] === undefined) {
+                    args[0] = "";
+                }
+
+                return fn.apply(this, args);
             }
-            return fn.apply(this, args);
-        }
-    }else{
-        descriptor.value = function (...args) { 
-            if (this.errors[name] === undefined) {
-              this.errors[name] = null;
+        }else{
+            descriptor.value = function (...args) { 
+                if (this.errors[name] === undefined) {
+                    this.errors[name] = null;
+                }
+
+                // arg0 is value
+                if (ignoreUndefined && args[0] === undefined) {
+                    args[0] = "";
+                }
+
+                return fn.apply(this, args);
             }
-            return fn.apply(this, args);
         }
+        
+        return descriptor;
     }
-    
-    return descriptor;
 }
 
 /**
@@ -91,12 +104,13 @@ export class BaseValidator {
      *
      * @param {string} field
      * @param {string} value
+     * @param {Object} context
      * @returns
      * @memberof BaseValidator
      */
-    validationFor(field,value) {
+    validationFor(field,value,context = null) {
         if (!this[field]) throw new Error(`'${field}' does not have validation`);
-        const validationResult = this[field](value);
+        const validationResult = this[field](value, context);
         
         // handle async validation and assign the result when ready
         if (this[field].constructor.name === "AsyncFunction") {
@@ -119,3 +133,4 @@ export class BaseValidator {
         return this.errors[field] = validationResult === undefined ? null : validationResult;
     }
 }
+

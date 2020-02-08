@@ -95,13 +95,15 @@ export default class UserFormComponent extends Component {
 In this example we use validator as validation library but you can use any library you want
 Validation methods can also be async 
 
+`@validationProperty(ignoreUndefined = true)` transform the value passed 
+
 *user.js*
 ```js
 import validator from 'validator';
 import { BaseValidator , validationProperty } from 'ember-base-form-validation';
 
 export class UserValidator extends BaseValidator {
-    @validationProperty
+    @validationProperty()
     username(str) {
         if (!validator.isLength(str,{
             min : 10
@@ -110,7 +112,7 @@ export class UserValidator extends BaseValidator {
         }
     }
 
-    @validationProperty
+    @validationProperty()
     async email(str) {
         if (!validator.isEmail(str)) {
             return 'Email not valid';
@@ -194,13 +196,14 @@ export default class MyformComponent extends BaseValidationFormComponent {
         console.log("Validate all");
     }
 }
+```
 
 Methods
 ------------------------------------------------------------------------------
 
 
 
-```
+
 
 Contributing
 ------------------------------------------------------------------------------
