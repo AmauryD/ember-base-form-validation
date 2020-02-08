@@ -28,10 +28,10 @@ export default class ApplicationController  extends Controller {
         this.validation.waitAndCheckErrors().then((hasErrors) => {
             if (hasErrors)
             {
-                console.log("NOPE");
+                alert('not pass');
+                return;
             }
-            console.log(this.model);
+            alert('pass');
         });
-        //console.log("NOPE");
     }
 }
