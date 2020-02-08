@@ -1,9 +1,9 @@
 ember-base-form-validation
 ==============================================================================
 
-Simple ember component based form validation module , only providing base structure and components for validation 
+Simple ember component based form validation module , only providing base structure and components for validation . His goal is to be flexible and adaptive to any situation.
 
-:warning: This addon does not provide any types validation methods or checks
+:warning: This addon does not provide any types validation methods or checks.
 
 
 Compatibility
@@ -28,45 +28,119 @@ Features
 - Async validation
 - Component level validation
 - You choose when to validate and at which level
-- You can use 2 components : 
-  - ValidationForm : form who contains ValidationInput and ValidationInputCustom components
-    - methods : validate 
-    - properties : validating , hasErrors
-  - ValidationInput 
-    - methods : validate
-    - properties : error
-  - ValidationInputCustom : you need to bind the value yourself , you juste have the method validate available
 
-Usage
+Elements
 ------------------------------------------------------------------------------
 
-#### Simple validation form :
+### The validation form component
 
+The validation form is the base of the validation , it must contain a `@schema` attribute in order to provide validation to the inputs.
 
 *userform.hbs*
-```handlebars
-<ValidationForm @schema={{this.validation}} as |form|>
-  <ValidationInput @parent={{form}} @validation="username"  @validateOn="change" @value={{@model.username}} as |i|>
-    {{#if i.error}}
-      <p>{{i.error}}</p>
-    {{/if}}
-  </ValidationInput>
-
-  <ValidationInput @parent={{form}} @validation="email" @validateOn="change" @value={{@model.username}} as |i|>
-    {{#if i.error}}
-      <p>{{i.error}}</p>
-    {{/if}}
-  </ValidationInput>
-  
-  {{#if form.validating}}
-    <p>Validating...</p>
-  {{else}}
-    <input type="submit" disabled={{form.hasErrors}} {{on "click" form.validate}} {{on "click" this.submit}} value="submit">
-  {{/if}}
+```html
+<ValidationForm @validateOnInit={{false}} class="form" @schema={{this.validation}} as |form|>
 </ValidationForm>
 ```
 
-*userform.js*
+#### attributes
+- `@schema` (required) : a `Validation schema` for the children inputs
+- `@validateOnInit` (optional) : a `boolean` to tell the form to validate or not all the children on init.
+- `any html attributes`(optional)
+
+#### methods
+
+- `validate`  : runs the validation for all the children
+
+#### properties
+
+- `hasErrors` (`boolean`) : returns if the form validator has errors
+- `validating` (`boolean`) : returns if the form validator is running validations (for async).
+
+### The input component
+
+The validation input is an HTML input who validates its value after some events had been triggered.
+
+```html
+<ValidationForm class="form" @schema={{this.validation}} as |form|>
+  <ValidationInput @validation="username" @validateOn="change" name="username" @parent={{form}} as |i|>
+    {{#if i.error}}
+      <p>{{i.error}}</p>
+    {{/if}}
+  </ValidationInput>
+  <ValidationInput @validation="email" @validateOn="focus" name="email" @parent={{form}} as |i|>
+    {{#if i.error}}
+      <p>{{i.error.message}} for {{i.error.field}}</p>
+    {{/if}}
+  </ValidationInput>
+  <input type="submit" disabled={{form.hasErrors}} {{on "click" this.submit}} value="submit">
+</ValidationForm>
+```
+
+#### attributes
+- `@parent` (`BaseValidationFormComponent`) (required) : the parent form.
+- `@validation` (`string`) (required) : Tell which validation the validator must use to validate the input value.
+- `@validateOn` (`string`) (optional) : an html event to tell the input when to launch its validation.
+- `@alone` (`boolean`) (optional) : disable the validation , `@parent` and `@validation` attributes become optional.
+- `any html attributes`(optional)
+
+#### methods
+
+- `validate`  : runs the validation for the input
+
+#### properties
+
+- `error` (`any`) : error associated to the input (`null` if no error)
+
+### The validation schema
+
+The validation schema checks if the current value of the input is correct , otherwhise it returns any value indicating there's an error for the field.
+If it returns `null` or `undefined` , the value is correct.
+The method can be async or sync.
+
+```js
+import validator from 'validator'; // external validation module
+import { BaseValidator , validationProperty } from 'ember-base-form-validation';
+
+export class UserValidator extends BaseValidator {
+    @validationProperty()
+    username(str) {
+        if (!validator.isLength(str,{
+            min : 10
+        })) {
+            return 'Lenght must be less than 10 characters';
+        }
+    }
+
+    @validationProperty()
+    async email(str) {
+        if (!validator.isEmail(str)) {
+            return { // can return in any format you want
+              message : 'Email not valid',
+              field : 'email'
+            };
+        }
+    }
+}
+```
+
+#### The validation property
+
+`@validationProperty(ignoreUndefined = true)` indicates that the method is a validation method. The parameter `ignoreUndefined` converts the input value to a null string if it's undefined.
+
+### properties
+
+- `errors` : errors of the validator
+
+### methods
+
+- `waitAndCheckErrors` (`Promise<boolean>`) : wait for the validator to finish validation and returns if it contains errors.
+
+- `hasErrors` (`boolean`) : returns if validator has errors
+
+- `validationRunning` (`boolean`) : returns if validator is running async tasks.
+
+### Registeting and checking the validation controller side 
+
 ```js
 import Component from '@glimmer/component';
 import { UserValidator } from '../validation/user';
@@ -92,41 +166,12 @@ export default class UserFormComponent extends Component {
 }
 ```
 
-In this example we use validator as validation library but you can use any library you want
-Validation methods can also be async 
 
-`@validationProperty(ignoreUndefined = true)` transform the value passed 
 
-*user.js*
-```js
-import validator from 'validator';
-import { BaseValidator , validationProperty } from 'ember-base-form-validation';
+### Custom validation input :
 
-export class UserValidator extends BaseValidator {
-    @validationProperty()
-    username(str) {
-        if (!validator.isLength(str,{
-            min : 10
-        })) {
-            return 'Lenght must be less than 10 characters';
-        }
-    }
-
-    @validationProperty()
-    async email(str) {
-        if (!validator.isEmail(str)) {
-            return 'Email not valid';
-        }
-    }
-}
-```
-
-#### Custom validation form :
-
-Same as above except for the template
-Custom Input let you define you own input to bind the value to and validate
-
-You can add the `@validateOnInit` property to the form , it will validate the input when they are loaded or registered
+Same as above except for the template.
+Custom Input let you define you own input to bind the value to and validate.
 
 *userform.hbs*
 ```handlebars
@@ -150,7 +195,7 @@ You can add the `@validateOnInit` property to the form , it will validate the in
   {{#if form.validating}}
     <p>Validating...</p>
   {{else}}
-    <input type="submit" disabled={{form.hasErrors}} {{on "click" form.validate}} {{on "click" this.submit}} value="submit">
+    <input type="submit" disabled={{form.hasErrors}} {{on "click" this.submit}} value="submit">
   {{/if}}
 </ValidationForm>
 ```
@@ -197,13 +242,6 @@ export default class MyformComponent extends BaseValidationFormComponent {
     }
 }
 ```
-
-Methods
-------------------------------------------------------------------------------
-
-
-
-
 
 Contributing
 ------------------------------------------------------------------------------
