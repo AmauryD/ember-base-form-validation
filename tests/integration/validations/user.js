@@ -2,7 +2,7 @@ import validator from 'validator';
 import { BaseValidator , validationProperty } from 'ember-base-form-validation';
 
 export class UserValidator extends BaseValidator {
-    @validationProperty
+    @validationProperty()
     username(str) {
         if (!validator.isLength(str,{
             min : 10
@@ -11,7 +11,7 @@ export class UserValidator extends BaseValidator {
         }
     }
 
-    @validationProperty
+    @validationProperty()
     email(str) {
         if (!validator.isEmail(str)) {
             return 'Email not valid';
