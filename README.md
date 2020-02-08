@@ -3,6 +3,7 @@ ember-base-form-validation
 
 ![Test](https://github.com/TRIPTYK/ember-base-form-validation/workflows/Test/badge.svg)
 ![Build](https://github.com/TRIPTYK/ember-base-form-validation/workflows/Build/badge.svg)
+[![npm version](https://badge.fury.io/js/ember-base-form-validation.svg)](https://badge.fury.io/js/ember-base-form-validation)
 
 Simple ember component based form validation module , only providing base structure and components for validation . His goal is to be flexible and adaptive to any situation.
 
