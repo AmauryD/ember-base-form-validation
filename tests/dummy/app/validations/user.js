@@ -8,7 +8,7 @@ function sleep(ms){
 }
 
 export class UserValidator extends BaseValidator {
-    @validationProperty
+    @validationProperty()
     username(str) {
         if (!validator.isLength(str,{
             min : 10
@@ -17,8 +17,9 @@ export class UserValidator extends BaseValidator {
         }
     }
 
-    @validationProperty
+    @validationProperty()
     async email(str) {
+        sleep(Math.random(1000));
         if (!validator.isEmail(str)) {
             return 'Email not valid';
         }

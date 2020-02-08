@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import Controller from '@ember/controller';
 import { UserValidator } from '../validations/user';
 import { action } from '@ember/object';
@@ -5,16 +6,19 @@ import { action } from '@ember/object';
 export default class ApplicationController  extends Controller {
     validation;
 
+    username = 'k';
+    email = 'k@gmaiL.com';
+
     get model() {
         return {
-            username : 'test',
-            email : 'test@email.com'
+            username : undefined,
+            email : undefined
         };
     }
 
     constructor(...args) {
         super(...args);
-        this.validation = new UserValidator();
+        this.validation = new UserValidator(this);
     }
     
     @action
