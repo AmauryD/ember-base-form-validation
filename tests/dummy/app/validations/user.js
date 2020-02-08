@@ -13,7 +13,7 @@ export class UserValidator extends BaseValidator {
         if (!validator.isLength(str,{
             min : 10
         })) {
-            return 'Lenght must be less than 10 characters';
+            return 'Lenght must be more than 10 characters';
         }
     }
 

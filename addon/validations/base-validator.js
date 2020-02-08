@@ -14,6 +14,7 @@ export function validationProperty(ignoreUndefined = true) {
         const fn = descriptor.value;
         
         if (descriptor.value.constructor.name === "AsyncFunction") {
+
             descriptor.value = function (...args) { 
                 if (this.errors[name] === undefined) {
                     this.errors[name] = null;
@@ -27,6 +28,7 @@ export function validationProperty(ignoreUndefined = true) {
                 return fn.apply(this, args);
             }
         }else{
+
             descriptor.value = function (...args) { 
                 if (this.errors[name] === undefined) {
                     this.errors[name] = null;
@@ -113,7 +115,7 @@ export class BaseValidator {
         const validationResult = this[field](value, context);
         
         // handle async validation and assign the result when ready
-        if (this[field].constructor.name === "AsyncFunction") {
+        if (typeof this.asyncErrors[field] === "object") {
             const asyncId = v1();
             this.asyncErrors[field][asyncId] = {
                 promise : validationResult,
