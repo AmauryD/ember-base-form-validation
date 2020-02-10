@@ -101,6 +101,10 @@ export class BaseValidator {
         return this.hasErrors();
     }
 
+    constructor(context = null) {
+        this.context = context;
+    }
+
     /**
      * Validate
      *
@@ -110,9 +114,9 @@ export class BaseValidator {
      * @returns
      * @memberof BaseValidator
      */
-    validationFor(field,value,context = null) {
+    validationFor(field,value) {
         if (!this[field]) throw new Error(`'${field}' does not have validation`);
-        const validationResult = this[field](value, context);
+        const validationResult = this[field](value);
         
         // handle async validation and assign the result when ready
         if (typeof this.asyncErrors[field] === "object") {
