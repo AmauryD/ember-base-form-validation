@@ -52,6 +52,10 @@ export default class BaseValidationInputComponent extends Component {
         this.parent.registerChild(this);
     }
 
+    get isDirty() {
+        return this.parent.state.validationSchema.isDirty(this.name);
+    }
+
     /**
      * Validate child value and update parent
      *
@@ -63,9 +67,8 @@ export default class BaseValidationInputComponent extends Component {
             if (this.args.alone) return; // if input is alone  ignore
         }
 
-        this.parent.updateState();
         let value = this.args.value || this.args.selected;
-        const res = await this.parent.state.validationSchema.validationFor(this.name,value,this);
+        const res = await this.parent.state.validationSchema.validationFor(this.name,value);
         this.parent.updateState(); 
         this.error = res;
     }

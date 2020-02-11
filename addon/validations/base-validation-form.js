@@ -50,6 +50,13 @@ export default class BaseValidationFormComponent extends Component {
     }
 
     /**
+     * 
+     */
+    get isDirty() {
+        return this.state.childrens.filter((e) => e.isDirty).length > 0;
+    }
+
+    /**
      *
      *
      * @readonly

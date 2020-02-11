@@ -17,7 +17,7 @@ export function validationProperty(ignoreUndefined = true) {
 
             descriptor.value = function (...args) { 
                 if (this.errors[name] === undefined) {
-                    this.errors[name] = null;
+                    this.errors[name] = undefined;
                     this.asyncErrors[name] = {};
                 }
 
@@ -31,7 +31,7 @@ export function validationProperty(ignoreUndefined = true) {
 
             descriptor.value = function (...args) { 
                 if (this.errors[name] === undefined) {
-                    this.errors[name] = null;
+                    this.errors[name] = undefined;
                 }
 
                 // arg0 is value
@@ -60,6 +60,10 @@ export class BaseValidator {
      */
     errors = {};
     asyncErrors = {};
+
+    isDirty(property) {
+        return this.errors.hasOwnProperty(property) && this.errors !== undefined;
+    }
 
     /**
      *
@@ -101,6 +105,10 @@ export class BaseValidator {
         return this.hasErrors();
     }
 
+    /**
+     * Some context to pass values like services that cannot be resolved here
+     * @param {*} context 
+     */
     constructor(context = null) {
         this.context = context;
     }

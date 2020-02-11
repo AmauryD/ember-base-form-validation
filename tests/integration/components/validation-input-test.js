@@ -1,6 +1,6 @@
 import { module, test } from 'qunit';
 import { setupRenderingTest } from 'ember-qunit';
-import { render , resetOnerror , setupOnerror , click } from '@ember/test-helpers';
+import { render , resetOnerror , setupOnerror , fillIn , click } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
 import { UserValidator } from "../validations/user";
 import { ConfigurationException } from "ember-base-form-validation";
@@ -109,12 +109,41 @@ module('Integration | Component | validation-input', function(hooks) {
         <button {{on "click" form.validate}}></button>
       </ValidationForm>
     `);
-
+    
     assert.strictEqual(this.element.querySelector("#username").value,"","Value is empty");
 
     await click('button');
 
     assert.strictEqual(this.element.querySelector("p.error").textContent,"error","Field contains errors after validate");
+  });
+
+  test('validation for undirty form', async function(assert) {
+    this.set('validation',new UserValidator());
+    const values = {
+      username : ""
+    };
+
+    this.set('values',values);
+    this.set('preventSubmit',(e) => {
+      e.preventDefault();
+    });
+
+    await render(hbs`
+      <ValidationForm @schema={{this.validation}} {{on "submit" this.preventSubmit}} as |form|>
+        <ValidationInput id="username" @validateOn="change" @value={{this.values.username}} @validation="username" @parent={{form}} as |e|>
+          {{#if e.error}}
+            <p class="error">error</p>
+          {{/if}}
+        </ValidationInput>
+        <button {{on "click" form.validate}} disabled={{if form.isDirty false true}}></button>
+      </ValidationForm>
+    `);
+    
+    assert.strictEqual(this.element.querySelector("button").disabled,true,"Field is disabled before validate");
+
+    await fillIn('#username',"test");
+
+    assert.strictEqual(this.element.querySelector("button").disabled,false,"Field is enabled validate");
   });
 
   test('validation on click disable', async function(assert) {

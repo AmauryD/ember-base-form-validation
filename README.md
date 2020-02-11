@@ -57,6 +57,8 @@ The validation form is the base of the validation , it must contain a `@schema` 
 
 #### properties
 
+
+- `isDirty` (`boolean`) : returns if the form is dirty (any field has been validated)
 - `hasErrors` (`boolean`) : returns if the form validator has errors
 - `validating` (`boolean`) : returns if the form validator is running validations (for async).
 
@@ -93,6 +95,7 @@ The validation input is an HTML input who validates its value after some events 
 
 #### properties
 
+- `isDirty` (`boolean`) : returns if the input value is dirty (has been validated)
 - `error` (`any`) : error associated to the input (`null` if no error)
 
 ### The validation schema
@@ -133,13 +136,17 @@ export class UserValidator extends BaseValidator {
 
 ### properties
 
-- `errors` : errors of the validator
+- `errors` `object` : errors of the validator
+- `context` `any` : context passed by the constructor
+
 
 ### methods
 
 - `waitAndCheckErrors` (`Promise<boolean>`) : wait for the validator to finish validation and returns if it contains errors.
 
 - `hasErrors` (`boolean`) : returns if validator has errors
+
+- `isDirty` (`boolean`) : returns if validator has validated this field at least once
 
 - `validationRunning` (`boolean`) : returns if validator is running async tasks.
 
@@ -155,7 +162,7 @@ export default class UserFormComponent extends Component {
 
     constructor(...args) {
         super(...args);
-        this.validation = new UserValidator();
+        this.validation = new UserValidator(this);
     }
     
     @action

@@ -1,6 +1,6 @@
 <h2 id="title">Welcome to Ember</h2>
 
-<ValidationForm @schema={{this.validation}} {{on "submit" this.submit}} @validateOnInit={{true}} as |form|>
+<ValidationForm @schema={{this.validation}} {{on "submit" this.submit}} as |form|>
   <ValidationInput @parent={{form}} @validation="username"  @validateOn="change" @value={{this.model.username}} as |i|>
     {{#if i.error}}
       <p>{{i.error}}</p>
@@ -16,7 +16,7 @@
   {{#if form.validating}}
     <p>Validating...</p>
   {{else}}
-    <input type="submit" {{on "click" form.validate}} value="submit">
+    <input type="submit" {{on "click" form.validate}} disabled={{if form.isDirty false true}} value="submit">
   {{/if}}
 
 </ValidationForm>
