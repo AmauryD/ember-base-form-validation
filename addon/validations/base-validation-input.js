@@ -68,7 +68,7 @@ export default class BaseValidationInputComponent extends Component {
         }
 
         let value = this.args.value || this.args.selected;
-        const res = await this.parent.state.validationSchema.validationFor(this.name,value);
+        const res = await this.parent.state.validationSchema.validationFor(this.name,value,this);
         this.parent.updateState(); 
         this.error = res;
     }
