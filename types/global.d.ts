@@ -4,3 +4,5 @@ declare module 'ember-base-form-validation/templates/*' {
   const tmpl: TemplateFactory;
   export default tmpl;
 }
+
+declare module 'ember-uuid';

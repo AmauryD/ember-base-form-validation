@@ -9,16 +9,25 @@ import { v1 } from "ember-uuid";
  * @param {*} descriptor
  * @returns
  */
-export function validationProperty(ignoreUndefined = true) {
-    return function(target, name, descriptor) {
+
+
+/**
+ * Comment
+ *
+ * @returns {MethodDecorator}
+ */
+export function ValidationProperty(ignoreUndefined : boolean = true): MethodDecorator {
+    return function(target: any, propertyKey: string | symbol, descriptor: PropertyDescriptor): PropertyDescriptor {
         const fn = descriptor.value;
         
         if (descriptor.value.constructor.name === "AsyncFunction") {
 
-            descriptor.value = function (...args) { 
-                if (this.errors[name] === undefined) {
-                    this.errors[name] = undefined;
-                    this.asyncErrors[name] = {};
+            descriptor.value = function (...args : any[]) { 
+                const thisContext = this as any;
+
+                if (thisContext.errors[name] === undefined) {
+                    thisContext.errors[name] = undefined;
+                    thisContext.asyncErrors[name] = {};
                 }
 
                 if (ignoreUndefined && args[0] === undefined) {
@@ -28,10 +37,11 @@ export function validationProperty(ignoreUndefined = true) {
                 return fn.apply(this, args);
             }
         }else{
-
-            descriptor.value = function (...args) { 
-                if (this.errors[name] === undefined) {
-                    this.errors[name] = undefined;
+            descriptor.value = function (...args : any[]) { 
+                const thisContext = this as any;
+                
+                if (thisContext.errors[name] === undefined) {
+                    thisContext.errors[name] = undefined;
                 }
 
                 // arg0 is value
@@ -41,8 +51,9 @@ export function validationProperty(ignoreUndefined = true) {
 
                 return fn.apply(this, args);
             }
-        }
+        }   
         
+        target.validationProperties[propertyKey] = descriptor;
         return descriptor;
     }
 }
@@ -53,16 +64,20 @@ export function validationProperty(ignoreUndefined = true) {
  * @export
  * @class BaseValidator
  */
-export class BaseValidator {
+export abstract class BaseValidator {
     /** 
      * @property {object} errors
      * @property {object} asyncErrors
      */
-    errors = {};
-    asyncErrors = {};
+    public errors : {[key : string] : any} = {};
+    protected asyncErrors : {[key : string] : any} = {};
+    protected context : object | null;
+    protected validationProperties : {
+        [key : string] : Function
+    } = {};
 
-    isDirty(property) {
-        return this.errors.hasOwnProperty(property) && this.errors !== undefined;
+    isDirty(property : string) : boolean {
+        return this.errors[property] && this.errors !== undefined;
     }
 
     /**
@@ -109,22 +124,19 @@ export class BaseValidator {
      * Some context to pass values like services that cannot be resolved here
      * @param {*} context 
      */
-    constructor(context = null) {
+    constructor(context : any = null) {
         this.context = context;
     }
 
     /**
      * Validate
-     *
-     * @param {string} field
-     * @param {string} value
-     * @param {Object} context
-     * @returns
-     * @memberof BaseValidator
      */
-    validationFor(field,value,context = null) {
-        if (!this[field]) throw new Error(`'${field}' does not have validation`);
-        const validationResult = this[field](value,context);
+    validationFor(field : string,value : string,context : any = null) {
+        if (this.validationProperties[field]) {
+            throw new Error(`'${field}' does not have validation`);
+        }
+
+        const validationResult = this.validationProperties[field](value,context);
    
         // handle async validation and assign the result when ready
         if (typeof this.asyncErrors[field] === "object") {
@@ -133,7 +145,7 @@ export class BaseValidator {
                 promise : validationResult,
                 id : asyncId
             };
-            return validationResult.then((value) => {
+            return validationResult.then((value:any) => {
                 if (value === undefined) {
                     this.errors[field] = null;
                 }else{

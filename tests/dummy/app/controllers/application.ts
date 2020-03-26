@@ -3,8 +3,8 @@ import Controller from '@ember/controller';
 import { UserValidator } from '../validations/user';
 import { action } from '@ember/object';
 
-export default class ApplicationController  extends Controller {
-    validation;
+export default class ApplicationController extends Controller {
+    private validation : UserValidator;
 
     username = 'k';
     email = 'k@gmaiL.com';
@@ -16,16 +16,16 @@ export default class ApplicationController  extends Controller {
         };
     }
 
-    constructor(...args) {
-        super(...args);
+    constructor(properties : object) {
+        super(properties);
         this.validation = new UserValidator(this);
     }
     
     @action
-    submit(e) {
+    submit(e : Event) {
         e.preventDefault();
 
-        this.validation.waitAndCheckErrors().then((hasErrors) => {
+        this.validation.waitAndCheckErrors().then((hasErrors : boolean) => {
             if (hasErrors)
             {
                 alert('not pass');
