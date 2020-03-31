@@ -1,6 +1,7 @@
 import Component from '@glimmer/component';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
+
 import { ConfigurationException } from "../errors/configurationException";
 import BaseValidationFormComponent from './base-validation-form';
 import { BaseValidator } from 'ember-base-form-validation';

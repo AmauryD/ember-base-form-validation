@@ -1,1 +1,0 @@
-export { default } from 'ember-base-form-validation/components/test';

@@ -4,7 +4,7 @@ import { UserValidator } from '../validations/user';
 import { action } from '@ember/object';
 
 export default class ApplicationController extends Controller {
-    private validation : UserValidator;
+    validation;
 
     username = 'k';
     email = 'k@gmaiL.com';
@@ -16,16 +16,16 @@ export default class ApplicationController extends Controller {
         };
     }
 
-    constructor(properties : object) {
+    constructor(properties) {
         super(properties);
         this.validation = new UserValidator(this);
     }
     
     @action
-    submit(e : Event) {
+    submit(e) {
         e.preventDefault();
 
-        this.validation.waitAndCheckErrors().then((hasErrors : boolean) => {
+        this.validation.waitAndCheckErrors().then((hasErrors) => {
             if (hasErrors)
             {
                 alert('not pass');

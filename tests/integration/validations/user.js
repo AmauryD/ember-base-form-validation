@@ -1,5 +1,5 @@
 import validator from 'validator';
-import { BaseValidator , validationProperty } from 'ember-base-form-validation';
+import { BaseValidator , ValidationProperty } from "ember-base-form-validation";
 
 function sleep(ms){
     return new Promise(resolve=>{
@@ -8,7 +8,7 @@ function sleep(ms){
 }
 
 export class UserValidator extends BaseValidator {
-    @validationProperty()
+    @ValidationProperty()
     username(str) {
         if (!validator.isLength(str,{
             min : 10
@@ -17,7 +17,7 @@ export class UserValidator extends BaseValidator {
         }
     }
 
-    @validationProperty()
+    @ValidationProperty()
     async email(str) {
         sleep(Math.random(1000));
         if (!validator.isEmail(str)) {
